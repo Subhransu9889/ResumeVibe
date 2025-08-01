@@ -16,3 +16,22 @@ export function formatSize(bytes: number, decimals: number = 2): string {
   // Format the number with the specified decimal places
   return parseFloat((bytes / Math.pow(k, i)).toFixed(decimals)) + ' ' + sizes[i];
 }
+
+/**
+ * Generates a UUID (Universally Unique Identifier)
+ * Uses the Web Crypto API if available, otherwise falls back to a simple implementation
+ * @returns A UUID string
+ */
+export const generateUUID = (): string => {
+  // Use the Web Crypto API if available (works in modern browsers and Node.js)
+  if (typeof globalThis.crypto !== 'undefined' && typeof globalThis.crypto.randomUUID === 'function') {
+    return globalThis.crypto.randomUUID();
+  }
+  
+  // Fallback implementation for environments without crypto.randomUUID
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+};
